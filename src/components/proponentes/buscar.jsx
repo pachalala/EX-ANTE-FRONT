@@ -1,5 +1,9 @@
 import { createContext, useState, useEffect } from "react";
-import Nav2 from "../Nav2";
+import Nav3 from "../Nav3";
+
+import SideBar from "../SideBar";
+
+
 import { usuarios as d_usuarios } from "../../data/usuarios";
 import { useParams, useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
@@ -12,7 +16,8 @@ import {
   TextField,
   Button,
   Typography,
-  Alert,
+  Alert, Toolbar,
+  Paper,
 } from "@mui/material";
 import Texto from "../library/Texto";
 import Titulo from "../library/Titulo";
@@ -216,30 +221,18 @@ const Buscar = () => {
 
   return (
     <>
-          <Container
-          
-        >
-          <Nav2 />
 
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{
-              mt: 1,
-              justifyContent: "center",
-              border: "1px solid #ccc", // Agrega un borde de 1px sólido con color gris claro
-              backgroundColor: "#ffffff",
-              // Establece un fondo gris claro
-              padding: "10px",
-              borderRadius: "5px",
-              width: "850px",
-              "& .super-app-theme--header": {
-                fontWeight: "bold",
-                //backgroundColor: 'rgba(255, 7, 0, 0.55)',
-              },
-            }}
-          >
+
+ 
+
+        <Box sx={{ display: "flex" }}>
+        <Nav3 />
+        <Toolbar />
+        <SideBar />
+        <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
+          <Toolbar />
+          <Paper sx={{ flexGrow: 1, p: 1 }}>
+    
             <Titulo titulo="Buscar Usuario" />
 
             <Box
@@ -335,8 +328,9 @@ const Buscar = () => {
             )}
 
             {noEncontrado ? "No encontrado.." : ""}
+            </Paper>
           </Box>
-        </Container>
+          </Box>
      
     </>
   );

@@ -1,6 +1,5 @@
 import {
-  Grid,
-  Link,
+  Grid, 
   IconButton,
   Container,
   Box,
@@ -13,9 +12,25 @@ import {
   ListItemText,Drawer,Divider ,Toolbar
 } from "@mui/material";
 
+import { Link } from "react-router-dom";
+
 const Sidebar = () => {
-  const opciones = ["Inicio", "Evaluaciones"];
+  const opciones = [ 
+    {nombre: 'Inicio', link :'/inicio'}
+    
+    ,{nombre: 'Evaluaciones', link: '/proponentes/buscar'}
+]
+  ;
   
+
+
+  const linkStyle = {
+    textDecoration: "none", // Elimina la decoración de texto
+    color: "inherit", // Utiliza el color heredado
+    cursor: "pointer", // Muestra el cursor como puntero
+  };
+
+
   return (
 
     <Box
@@ -55,15 +70,21 @@ const Sidebar = () => {
   
       
 
-      {opciones.map((text, index) => (
+      {opciones.map((pagina, index) => (
         <ListItem key={index} disablePadding>
           <ListItemButton>
-            <ListItemText primary={text} />
+          <Link to={pagina.link} key={pagina.nombre} style={linkStyle}>
+            
+            <ListItemText primary={pagina.nombre} />
+            </Link>
           </ListItemButton>
         </ListItem>
       ))}
     </List>
  
+
+   
+
     </Drawer>
     </Box>
   );

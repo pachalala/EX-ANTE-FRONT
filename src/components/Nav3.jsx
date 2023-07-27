@@ -26,36 +26,14 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-const pages = [
-  {
-    name: "Inicio",
-    link: "/inicio",
-  },
-  /* , 
-  {
-    name:  'Usuarios-Crear',
-    link :  '/usuarios/crear'
-  }
-  , 
-  {
-    name:  'Usuarios-Buscar',
-    link :  '/usuarios/buscar'
-  }
-  
-  */
-];
-const settings = [
-  {
-    name: "Cuenta",
-    link: "/inicio",
-  },
-  {
-    name: "Salir",
-    link: "/",
-  },
-];
 
-function Nav2() {
+
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
+ 
+ 
+
+function Nav3() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openD, setOpenD] = useState(false);
@@ -117,157 +95,48 @@ function Nav2() {
 
   return (
     <>
-      <AppBar position="static" elevation={0}>
-        <Container >
-          <Toolbar  >
-         
-           
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".01rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-               &nbsp;&nbsp; Evaluación Ex-Ante
-            </Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">
-                      <Link to={page.link} style={linkStyle}>
-                        {page.name}
-                      </Link>
-                    </Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href=""
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              MESA AYUDA
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Link to={page.link} key={page.name} style={linkStyle}>
-                  <Button
-                    key={page.name}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: "white", display: "block" }}
-                  >
-                    {page.name}
-                  </Button>
-                </Link>
-              ))}
-
-              <Button
-                sx={{ my: 2, color: "white", display: "block" }}
-                id="basic-button"
-                aria-controls={open_n ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open_n ? "true" : undefined}
-                onClick={handleClick_n}
-              >
-                Evaluaciones
-              </Button>
-
-              <Menu
-                sx={{ width: 320, maxWidth: "100%" }}
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open_n}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link
-                    to="/usuarios/editar/-1"
-                    key="crear"
-                    replace
-                    style={linkStyle}
-                  >
-                    {" "}
-                    Crear{" "}
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link to="/usuarios/buscar" key="buscar" style={linkStyle}>
-                    {" "}
-                    Buscar
-                  </Link>
-                </MenuItem>
-              </Menu>
-            </Box>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {Login.nombre}   ({Login.perfil_nombre}) 
-            </Box>
-
-
-            <Box sx={{ flexGrow: 0 }}>
-
-            <Link to="#"   onClick={handleClick} key="login" style={linkStyle}>
-                  Salir    
-           </Link>
-
+        <Box sx={{ display: "flex" }}>
+      <AppBar
        
+        sx={{ width: `calc(100% - ${240}px)`, ml: `${240}px` }}
+      >
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div">
+          
+          </Typography>
+
+
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}> <Typography variant="h5">
+            
+             Evaluación Ex-Ante  
+             </Typography>
+          
+          
+          </Box>
+
+          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+          <Typography variant="subtitle1" noWrap component="div">
+          {Login.nombre}   ({Login.perfil_nombre}) 
+             &nbsp;&nbsp; &nbsp;&nbsp;
+          </Typography>
+  
             </Box>
-          </Toolbar>
-        </Container>
+          <Box sx={{ flexGrow: 0 }}>
+
+
+        
+
+<Link to="#" onClick={handleClick} style={linkStyle}   sx={{ display: 'flex', alignItems: 'center' }} >
+      Salir      <ExitToAppIcon sx={{ mr: 0.5 }} fontSize="inherit"  />
+</Link>
+
+
+</Box>
+
+        </Toolbar>
       </AppBar>
+      </Box>
+
 
       <Dialog
         open={openD}
@@ -294,4 +163,4 @@ function Nav2() {
     </>
   );
 }
-export default Nav2;
+export default Nav3;
