@@ -3,36 +3,42 @@ import Nav3 from "../Nav3";
 
 import SideBar from "../SideBar";
 
-
 import { usuarios as d_usuarios } from "../../data/usuarios";
 import { useParams, useNavigate } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import {
   Grid,
-  Link,
+   
   IconButton,
   Container,
   Box,
   TextField,
   Button,
   Typography,
-  Alert, Toolbar,
+  Alert,
+  Toolbar,
   Paper,
 } from "@mui/material";
 import Texto from "../library/Texto";
 import Titulo from "../library/Titulo";
 
 import EditIcon from "@mui/icons-material/Edit";
+import Divider from '@mui/material/Divider';
 
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-import Regiones from "../library/Regiones";
-
-import { Perfiles } from "../library/Perfiles";
+import { Licitaciones } from "../library/Licitaciones";
 import { useForm, Controller } from "react-hook-form";
-import  config  from "../../config.js";
+import config from "../../config.js";
 
-const defaultTheme = createTheme();
+import { licitaciones } from "../../data/licitaciones";
+
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useTheme } from "@mui/material";
+
+import { Link } from "react-router-dom";
 const Buscar = () => {
   const [usuarios, setusuarios] = useState([]);
 
@@ -43,7 +49,19 @@ const Buscar = () => {
   const [noEncontrado, setnoEncontrado] = useState(false);
   const [buscando, setbuscando] = useState(false);
 
+  const [idLicitacion, setidLicitacion] = useState();
+  const [propuestas, setpropuestas] = useState();
+
   const navegate = useNavigate();
+  const theme = useTheme();
+
+
+   const hcolor =  theme.palette.primary.light;
+   const contrastText =  theme.palette.primary.contrastText;
+   
+
+ 
+console.log("font:" + theme.typography.fontWeightMedium);
 
   useEffect(() => {
     //   setPlatos_db(D_Platos);
@@ -53,33 +71,15 @@ const Buscar = () => {
 
     console.log(" ini context:: ");
   }, []);
-
-  function validacampos(event) {
-    const data = new FormData(event.currentTarget);
-
-    const usuarioValido = data.get("usuario").trim() !== "";
-    const nombreValido = data.get("nombre").trim() !== "";
-    const rutValido = data.get("rut").trim() !== "";
-    const regionValido = data.get("region").trim() !== "";
-    //const perfilValido = data.get("perfil").trim() !== "";
-
-    console.log(usuarioValido || nombreValido || rutValido);
-
-    setAlertVacios(
-      !(usuarioValido || nombreValido || rutValido || regionValido)
-    );
-
-    return usuarioValido || nombreValido || rutValido || regionValido;
-  }
+ 
+  
+ 
 
   async function trae_datos(data) {
-
     setbuscando(true);
 
     try {
- 
-
-      const response = await fetch(config.backendURL+"/usuarios", {
+      const response = await fetch(config.backendURL + "/usuarios", {
         method: "POST",
         body: JSON.stringify({
           UsuLogin: data.get("usuario"),
@@ -98,8 +98,7 @@ const Buscar = () => {
 
       setusuarios(data_res);
 
-       data_res.length==0  ?   setnoEncontrado(true) : setnoEncontrado(false) ;
-
+      data_res.length == 0 ? setnoEncontrado(true) : setnoEncontrado(false);
 
       console.log("datos leidos:" + data_res);
     } catch (error) {
@@ -107,133 +106,94 @@ const Buscar = () => {
     }
 
     setbuscando(false);
-
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    if (validacampos(event)) {
-      const data = new FormData(event.currentTarget);
-      trae_datos(data);
-
-      // usuario, nombre, rut
-      console.log(
-        ` "UsuLogin": ${data.get("usuario")},  "UsuNombre":  ${
-          data.nombre
-        }, "UsuRut":  ${data.rut}`
-      );
-
-      /*
-      const data = new FormData(event.currentTarget);
-      const nombrEval = data.get('usuario').trim() !== ''
-      const claveEval = data.get('clave').trim() !== ''
-  */
-
-      setbuscar(true);
-    } else {
-      console.log("Los campos no son válidos");
-    }
-  };
-
-  const MatEdit = ({ index }) => {
-    const handleEditClick = () => {
-      navegate("/usuarios/editar/" + index);
-    };
-
-    return (
-      <IconButton
-        color="secondary"
-        aria-label="add an alarm"
-        onClick={handleEditClick}
-      >
-        <EditIcon />
-      </IconButton>
+  const handleChange = (event) => {
+     
+    const d_licitacion = licitaciones.find(
+      (lic) => lic.id === event.target.value
     );
+     
+    
+
+    setpropuestas(d_licitacion.proyectos);
+
+     
   };
 
-  const { control } = useForm({
+    
+  const {
+    register,
+    formState: { errors },
+
+    control,
+    setValue,
+    getValues,
+  } = useForm({
     defaultValues: {
-      id: 0,
-      login: "",
-      nombre: "",
-      rut: "",
-      clave: "",
-      perfil: "",
-      region: "",
-      activo: false,
+      licitacion: "",
     },
   });
 
   const columns = [
     {
-      field: "actions",
-      headerName: "",
-      sortable: false,
-      width: 80,
-      disableClickEventBubbling: true,
+      field: "Route",
+      headerClassName: "super-app-theme--header",
+      headerName: " ",
+      width: 30,
+      cellClassName: "actions",
       renderCell: (params) => {
         return (
-          <div
-            className="d-flex justify-content-between align-items-center"
-            style={{ cursor: "pointer" }}
-          >
-            <MatEdit index={params.row.usuLogin} />
-          </div>
+          <><Link to={'/propuestas/resumen/'+params.row.id}  style={linkStyle}>  <EditIcon     color="secondary"
+           sx={{ mr: 2 }} fontSize="inherit"/>   </Link>
+      </>
         );
       },
-    },
-    /*
-"usuLogin": "10748339",
-        "usuRut": "10748339-K",
-        "usuIdrol": 6,
-        "usuNombre": "ALVARO TAPIA CORREA",
-        "usuPasswd": "Taburete2#",
-        "usuEnable": "1",
-        "usuRegion": 5,
+    } 
+     
+    ,
+    {
+      field: "nombre",
+      headerName: "Propuesta",
+      width: 250,
+      headerClassName: "super-app-theme--header",
+    }
 
-*/
+    ,
     {
-      field: "usuLogin",
-      headerName: "Login",
-      width: 100,
+      field: "admisible",
+      headerName: "Admisible",
+      width: 150,
       headerClassName: "super-app-theme--header",
-    },
+    } ,
     {
-      field: "usuRut",
-      headerName: "Rut",
-      width: 130,
+      field: "puntaje",
+      headerName: "Puntaje",
+      width: 248,
       headerClassName: "super-app-theme--header",
-    },
-    {
-      field: "usuNombre",
-      headerName: "Nombre",
-      width: 420,
-      headerClassName: "super-app-theme--header",
-    },
-    {
-      field: "usuRegion",
-      headerName: "Región",
-      width: 60,
-      headerClassName: "super-app-theme--header",
-    },
+    }
+
+
   ];
+
+
+
+  const linkStyle = {
+    textDecoration: "none", // Elimina la decoración de texto
+    color: "inherit", // Utiliza el color heredado
+    cursor: "pointer", // Muestra el cursor como puntero
+  };
 
   return (
     <>
-
-
- 
-
-        <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex" }}>
         <Nav3 />
         <Toolbar />
         <SideBar />
         <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
           <Toolbar />
           <Paper sx={{ flexGrow: 1, p: 1 }}>
-    
-            <Titulo titulo="Buscar Usuario" />
+            <Titulo texto="Buscar propuesta" />
 
             <Box
               sx={{
@@ -243,76 +203,46 @@ const Buscar = () => {
                 width: "550px",
               }}
             >
-              <TextField
-                margin="normal"
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-                id="usuario"
-                label="Login Usuario"
-                name="usuario"
-                autoComplete="usuario"
-                autoFocus
-                variant="filled"
-                placeholder="Ej: 11340632"
-                sx={
-                  {
-                    //  backgroundColor: '#e9eff7'
-                  }
-                }
-              />
 
-              <TextField
-                margin="normal"
-                fullWidth
-                id="nombre"
-                label="Nombre Usuario"
-                name="nombre"
-                autoComplete="nombre"
-                InputLabelProps={{ shrink: true }}
-                variant="filled"
-                placeholder="Ej: pepito los palotes"
-              />
-              <TextField
-                InputLabelProps={{ shrink: true }}
-                margin="normal"
-                variant="filled"
-                fullWidth
-                id="rut"
-                label="RUT"
-                name="rut"
-                autoComplete="rut"
-                placeholder="Ej: 11340632-1"
-              />
 
-              <Regiones
-                id="region"
-                name="region"
-                label="Región"
-                control={control}
-              />
-              {AlertVacios ? (
-                <Alert sx={{ mb: 3, width: "100%" }} severity="error">
-                  Debe existir algún campo de búsqueda
-                </Alert>
-              ) : (
-                <></>
-              )}
 
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                sx={{ mt: 3, mb: 4 }}
-              >
-                    {!buscando ? "Buscar" : "Cargando.."}
-              </Button>
-            </Box>
+              <FormControl fullWidth variant="filled">
+                  
+                <InputLabel id="licitacion">Licitacion</InputLabel>
+                <Select   
+                  labelId="Licitacion"
+                  id="licitacion"
+                  {...register("licitacion")}
+                  label="Seleccione una opción"
+                  onChange={handleChange}
+                  defaultValue=""
+                >
+                  {licitaciones.map((option) => (
+                    <MenuItem key={option.id} value={option.id}>
+                      {option.nombre}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+ 
 
-            {buscar && !noEncontrado ? (
-              <div style={{ width: 800 }}>
+           
+            </Box>    <Toolbar />
+            
+
+            {propuestas ? (
+              <Box
+              sx={{
+                 
+                width: 700,
+                '& .super-app-theme--header': {
+                  backgroundColor: theme.palette.primary.light, fontWeight: theme.typography.fontWeightMedium
+                },
+              }}
+            >
                 <DataGrid
                   getRowId={() => Math.floor(Math.random() * 100000000)}
-                  rows={usuarios}
+                  rows={propuestas}
                   columns={columns}
                   initialState={{
                     pagination: {
@@ -322,16 +252,15 @@ const Buscar = () => {
                     },
                   }}
                 />
-              </div>
+              </Box>
             ) : (
               <></>
             )}
 
             {noEncontrado ? "No encontrado.." : ""}
-            </Paper>
-          </Box>
-          </Box>
-     
+          </Paper>
+        </Box>
+      </Box>
     </>
   );
 };

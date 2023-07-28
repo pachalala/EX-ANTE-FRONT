@@ -38,6 +38,13 @@ const defaultTheme = createTheme({
   palette: {
     type: "light",
 
+   
+    primary: {
+      main: '#4170B5',
+      light: '#dbdbe0' 
+    },
+
+     
     secondary: {
       main: "#f50057",
     },
@@ -120,7 +127,7 @@ function App() {
                   Login
                 </Route>
 
-                <Route path="/proponentes/buscar" element={<Buscar />}>
+                <Route path="/propuestas/buscar" element={<Buscar />}>
                   Buscar proyectos  
                 </Route>
                 <Route path="/usuarios/editar/:id" element={<Editar />}>

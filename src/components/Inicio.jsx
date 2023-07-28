@@ -13,11 +13,7 @@ import {
   Toolbar,
   Paper,
   Breadcrumbs,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+  
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 
@@ -32,6 +28,10 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
+
+
+import Titulo from "./library/Titulo";
+
 const Inicio = () => {
   const [openD, setOpenD] = useState(false);
   const navigateTo = useNavigate();
@@ -79,9 +79,8 @@ const Inicio = () => {
          
           <Toolbar />
           <Paper sx={{ flexGrow: 1, p: 1 }}>
-            <Typography variant="h5" noWrap component="div">
-              Inicio
-            </Typography>
+            <Titulo texto="Inicio" />
+             
 
             <Typography subtitle1>Bienvenido {Login.nombre}</Typography>
             <Typography paragraph>

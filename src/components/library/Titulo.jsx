@@ -1,11 +1,11 @@
 import {Typography} from "@mui/material"; 
 
 const Titulo  = ({
-    titulo
+    texto
   }) => {
     return (
         <Typography component="h2" variant="h5">
-       {titulo}
+       {texto}
 </Typography>
     );
   };

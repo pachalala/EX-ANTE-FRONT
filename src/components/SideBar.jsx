@@ -18,7 +18,7 @@ const Sidebar = () => {
   const opciones = [ 
     {nombre: 'Inicio', link :'/inicio'}
     
-    ,{nombre: 'Evaluaciones', link: '/proponentes/buscar'}
+    ,{nombre: 'Evaluaciones', link: '/propuestas/buscar'}
 ]
   ;
   
