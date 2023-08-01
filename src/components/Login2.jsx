@@ -36,14 +36,11 @@ export default function Login2() {
 
    const navigateTo = useNavigate();
 
-  useEffect(() => {
-    //   setPlatos_db(D_Platos);
-    //   setPlatos_Lista(D_Platos);
-    // llena_ingredientes();
+  useEffect(() => { 
     setLogin({});
 
     console.log(" ini context:: ");
-    // setPlatos_l(D_Platos);
+    
   }, []);
 
  

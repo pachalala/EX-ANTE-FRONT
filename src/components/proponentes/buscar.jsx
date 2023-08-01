@@ -144,7 +144,7 @@ console.log("font:" + theme.typography.fontWeightMedium);
       cellClassName: "actions",
       renderCell: (params) => {
         return (
-          <><Link to={'/propuestas/resumen/'+params.row.id}  style={linkStyle}>  <EditIcon     color="secondary"
+          <><Link to={'/propuestas/principal/'+params.row.id}  style={linkStyle}>  <EditIcon     color="secondary"
            sx={{ mr: 2 }} fontSize="inherit"/>   </Link>
       </>
         );

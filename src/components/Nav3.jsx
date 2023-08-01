@@ -3,15 +3,9 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import Typography from "@mui/material/Typography"; 
+import Button from "@mui/material/Button"; 
+import MenuItem from "@mui/material/MenuItem"; 
 
 import { Link } from "react-router-dom";
 import { GenContext } from "../context/GenContext";
@@ -27,19 +21,14 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
-
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-
- 
- 
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 function Nav3() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openD, setOpenD] = useState(false);
-  const {  Login,    setLogin } = useContext(GenContext);
+  const { Login, setLogin } = useContext(GenContext);
   const [open, setOpen] = useState(true);
- 
 
   const { MenuIn, setMenuIn } = useContext(GenContext);
 
@@ -73,9 +62,9 @@ function Nav3() {
   const handleCloseUserMenu = () => {
     console.log("cerrando menu..");
 
-  //  setLogin({ nombre: "", perfil: "", ini: 0 });
+    //  setLogin({ nombre: "", perfil: "", ini: 0 });
     setAnchorElUser(null);
-     setMenuIn(true);
+    setMenuIn(true);
   };
 
   const linkStyle = {
@@ -95,48 +84,34 @@ function Nav3() {
 
   return (
     <>
-        <Box sx={{ display: "flex" }}>
-      <AppBar
-       
-        sx={{ width: `calc(100% - ${240}px)`, ml: `${240}px` }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-          
-          </Typography>
+      <Box sx={{ display: "flex" }}>
+        <AppBar sx={{ width: `calc(100% - ${240}px)`, ml: `${240}px` }}>
+          <Toolbar>
+            <Typography variant="h6" noWrap component="div"></Typography>
 
-
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}> <Typography variant="h5">
-            
-             Evaluación Ex-Ante  
-             </Typography>
-          
-          
-          </Box>
-
-          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-          <Typography variant="subtitle1" noWrap component="div">
-          {Login.nombre}   ({Login.perfil_nombre}) 
-             &nbsp;&nbsp; &nbsp;&nbsp;
-          </Typography>
-  
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              {" "}
+              <Typography variant="h5">Evaluación Ex-Ante</Typography>
             </Box>
-          <Box sx={{ flexGrow: 0 }}>
 
-
-        
-
-<Link to="#" onClick={handleClick} style={linkStyle}   sx={{ display: 'flex', alignItems: 'center' }} >
-      Salir      <ExitToAppIcon sx={{ mr: 0.5 }} fontSize="inherit"  />
-</Link>
-
-
-</Box>
-
-        </Toolbar>
-      </AppBar>
+            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+              <Typography variant="subtitle1" noWrap component="div">
+                {Login.nombre} ({Login.perfil_nombre}) &nbsp;&nbsp; &nbsp;&nbsp;
+              </Typography>
+            </Box>
+            <Box sx={{ flexGrow: 0 }}>
+              <Link
+                to="#"
+                onClick={handleClick}
+                style={linkStyle}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                Salir <ExitToAppIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+              </Link>
+            </Box>
+          </Toolbar>
+        </AppBar>
       </Box>
-
 
       <Dialog
         open={openD}
@@ -151,11 +126,15 @@ function Nav3() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel}   color="primary"
-                  variant="outlined">Cancelar</Button>
-          <Button onClick={handleYes} autoFocus   color="primary"
-                  variant="contained"
-                >
+          <Button onClick={handleCancel} color="primary" variant="outlined">
+            Cancelar
+          </Button>
+          <Button
+            onClick={handleYes}
+            autoFocus
+            color="primary"
+            variant="contained"
+          >
             OK
           </Button>
         </DialogActions>

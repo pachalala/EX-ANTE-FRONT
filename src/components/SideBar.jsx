@@ -55,7 +55,7 @@ const Sidebar = () => {
        <Toolbar>
 
        <ListItem key="a"  >
-       <img src="../assets/Logo_FOSIS.png"  ></img>
+       <img src="/assets/Logo_FOSIS.png"  ></img>
          
         </ListItem>
        

@@ -13,13 +13,12 @@ import Login2 from "./components/Login2";
 
 import Buscar from "./components/proponentes/buscar";
 
-import Editar from "./components/proponentes/editar";
-import Editar_Formik from "./components/proponentes/editar";
+import Principal from "./components/proponentes/Principal"; 
+import Admisibilidad from "./components/proponentes/Admisibilidad"; 
+
 
 import Inicio from "./components/Inicio";
-import { useLocation } from "react-router-dom";
-import { ConstructionOutlined } from "@mui/icons-material";
-
+import { useLocation } from "react-router-dom"; 
 import {
   Box,
   CssBaseline,
@@ -105,7 +104,7 @@ function App() {
    */
   }, [Login.ini]);
 
-  if (false) {
+  if (false){ // (!Login.nombre) {
     //!Login.nombre
     console.log("SIN usuario..");
 
@@ -120,24 +119,22 @@ function App() {
       <>
         <BrowserRouter basename={config.baseURL}>
           <ThemeProvider theme={defaultTheme}>
-            <CssBaseline />
-            <Container>
+          <CssBaseline/>
+             <Container>
               <Routes>
                 <Route path="/Login" element={<Login2 />}>
                   Login
                 </Route>
 
                 <Route path="/propuestas/buscar" element={<Buscar />}>
-                  Buscar proyectos  
                 </Route>
-                <Route path="/usuarios/editar/:id" element={<Editar />}>
-                  Editar
-                </Route>
+                <Route path="/propuestas/principal/:id" element={<Principal />}>
+                            </Route>
+                 <Route path="/propuestas/admisibilidad/:id" element={<Admisibilidad />} />
+                               
                 <Route path="/inicio" element={<Inicio />}>
-                  Home
                 </Route>
                 <Route path="/" element={<Login2 />}>
-                  Inicio
                 </Route>
               </Routes>
             </Container>
