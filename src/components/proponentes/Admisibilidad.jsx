@@ -5,7 +5,14 @@ import SideBar from "../SideBar";
 
 
 import { useParams, useNavigate } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  GridRowModes,
+  DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid';
+
 import {
   Grid,
   Link,
@@ -23,8 +30,8 @@ import {
   DialogContentText,
   DialogActions,
   FormControlLabel,
-  Checkbox, Toolbar,
-  Paper, Chip, Stack, 
+  Checkbox, Toolbar, Select, MenuItem,
+  Paper, Chip, Stack,
 } from "@mui/material";
 
 
@@ -47,11 +54,43 @@ import { useTheme } from "@mui/material";
 import { propuesta } from "../../data/propuesta";
 
 import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
+import AddIcon from "@mui/icons-material/Add";
 
 const defaultTheme = createTheme();
 
+
+
+
+function EditToolbar(props) {
+  const { setRows, setRowModesModel } = props;
+
+  const handleClick = () => {
+    const id = randomId();
+    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+    }));
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+        Add record
+      </Button>
+    </GridToolbarContainer>
+  );
+}
+
+
 const Admisibilidad = () => {
 
+
+
+  const [rows, setRows] = useState(admi_datos);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   const { MenuIn, setMenuIn } = useContext(GenContext);
 
@@ -142,7 +181,7 @@ const Admisibilidad = () => {
 
 
   const columns = [
-  
+
     {
       field: "sigla",
       headerName: "N°",
@@ -156,7 +195,9 @@ const Admisibilidad = () => {
       headerName: "ITEM",
       width: 900,
       headerClassName: "super-app-theme--header",
-    },
+    }
+    ,
+    /*
     {
       field: "texto_valor",
       headerName: "Clasificación",
@@ -165,9 +206,95 @@ const Admisibilidad = () => {
       valueOptions: ['Sí', 'No', 'Doc no entregado'],
       editable: true,
       type: 'singleSelect'
-    }
+    } 
+    ,
+*/
+ 
+    {
+      headerName: 'Status',
+      field: "texto_valor", 
+      width: 150,
+      editable: true,
+      renderCell: (params) => (
+<>
+        {params.value}
+
+        
+        </>
+      ),
+      
+      renderEditCell: (params) => (
+        <>
+               
+        
+                <Select
+                  value={params.value}
+                  onChange={(e) => {
+                    params.api.setEditCellValue(params.id, params.field, e.target.value);
+                  }}
+                >
+                  {params.row.alternativas.map((option) => (
+                    <MenuItem key={option.id} value={option.id}>
+                      {option.nombre}
+                    </MenuItem>
+                  ))}
+                </Select>
+                </>
+              ),
 
 
+    },
+
+
+
+
+
+
+
+
+
+
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
+      width: 100,
+      headerClassName: "super-app-theme--header",
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
   ];
 
 
@@ -178,6 +305,46 @@ const Admisibilidad = () => {
     cursor: "pointer", // Muestra el cursor como puntero
   };
 
+
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleDeleteClick = (id) => () => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const handleCancelClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = rows.find((row) => row.id === id);
+    if (editedRow.isNew) {
+      setRows(rows.filter((row) => row.id !== id));
+    }
+  };
+
+  const processRowUpdate = (newRow) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };
+
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
 
   return (
     <>
@@ -237,22 +404,35 @@ const Admisibilidad = () => {
                 }}
               >
                 <DataGrid
- 
+
                   sx={{
-                   "& .MuiDataGrid-cellContent": {
+                    "& .MuiDataGrid-cellContent": {
                       whiteSpace: "normal",
                       lineHeight: "normal",
                       // Forced to use important since overriding inline styles
                       height: "unset !important",
                       maxHeight: "168px !important",
-                      wordwrap: "break-word" ,
-                        
-                   }
+                      wordwrap: "break-word",
+
+                    }
 
                   }}
+
+                  rowModesModel={rowModesModel}
+                  onRowModesModelChange={handleRowModesModelChange}
+                  onRowEditStop={handleRowEditStop}
+                  processRowUpdate={processRowUpdate}
+                  slots={{
+                    toolbar: EditToolbar,
+                  }}
+                  slotProps={{
+                    toolbar: { setRows, setRowModesModel },
+                  }}
+
+
                   editMode="row"
                   getRowId={() => Math.floor(Math.random() * 100000000)}
-                  rows={admi_datos}
+                  rows={rows}
                   columns={columns}
                   initialState={{
                     pagination: {
@@ -264,7 +444,7 @@ const Admisibilidad = () => {
                 />
               </Box>
 
-              {  JSON.stringify(  admi_datos) }
+              {JSON.stringify(rows)}
 
               <ButtonGroup sx={{
                 m: 3
@@ -288,7 +468,7 @@ const Admisibilidad = () => {
 
 
     </>
-  ); 
+  );
 };
 
 export default Admisibilidad;
